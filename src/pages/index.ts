@@ -1,0 +1,7 @@
+export { default as Dashboard } from './Dashboard'
+export { default as Home } from './Home'
+export { default as Students } from './Students'
+export { default as Subjects } from './Subjects'
+export { default as Results } from './Results'
+export { default as Classes } from './Classes'
+export { default as Staff } from './Staff'
