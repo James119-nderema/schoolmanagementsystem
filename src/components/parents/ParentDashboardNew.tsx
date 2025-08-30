@@ -47,7 +47,6 @@ interface DashboardData {
 
 export default function ParentDashboard() {
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
@@ -84,8 +83,6 @@ export default function ParentDashboard() {
       }
     } catch (err) {
       setError('Network error occurred');
-    } finally {
-      setLoading(false);
     }
   };
 
