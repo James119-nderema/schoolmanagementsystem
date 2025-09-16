@@ -5,8 +5,17 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 import './index.css'
+import { setupAxiosInterceptors } from './utils/apiInterceptors'
+
+// Setup axios interceptors for automatic auth handling
+setupAxiosInterceptors();
 import { AuthProvider } from './contexts/AuthContext'
+import { StaffAuthProvider } from './contexts/StaffAuthContext'
+import { ParentAuthProvider } from './contexts/ParentAuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
+import StaffProtectedRoute from './components/StaffProtectedRoute'
+import ParentProtectedRoute from './components/ParentProtectedRoute'
+import AuthenticatedRoute from './components/AuthenticatedRoute'
 import LandingLayout from './layout/LandingLayout'
 import MainLayout from './layout/MainLayout'
 import StaffMainLayout from './layout/StaffMainLayout'
@@ -24,11 +33,19 @@ import StaffClasses from './components/staff/StaffClasses'
 import StaffSubjects from './components/staff/StaffSubjects'
 import StaffResults from './components/staff/StaffResults'
 import StaffProfile from './components/staff/StaffProfile'
+import InputMarks from './components/staff/InputMarks'
+import ViewResults from './components/staff/ViewResults'
+import StatisticsDashboard from './pages/StatisticsDashboard'
+import { StudentAnalyticsWrapper, ClassAnalyticsWrapper, SubjectAnalyticsWrapper } from './components/AnalyticsWrappers'
+import SchoolDashboard from './pages/SchoolDashboard'
+import StudentStatistics from './pages/StudentStatistics'
+import ClassStatistics from './pages/ClassStatistics'
+import ReportsDashboard from './components/reports/ReportsDashboard'
 import ParentRegistration from './components/parents/ParentRegistration'
 import ParentLogin from './components/parents/ParentLogin'
 import ParentForgotPassword from './components/parents/ParentForgotPassword'
-import ParentDashboard from './components/parents/ParentDashboard'
-import ParentProtectedRoute from './components/ParentProtectedRoute'
+// import ParentDashboardOld from './components/parents/ParentDashboard'
+import ParentDashboardNew from './pages/ParentDashboard'
 import Dashboard from './pages/Dashboard'
 import Home from './pages/Home'
 import Students from './pages/Students'
@@ -53,7 +70,7 @@ const router = createBrowserRouter([
         path: 'parent-dashboard', 
         element: (
           <ParentProtectedRoute>
-            <ParentDashboard />
+            <ParentDashboardNew />
           </ParentProtectedRoute>
         ) 
       },
@@ -68,13 +85,62 @@ const router = createBrowserRouter([
       { path: 'reset-password', element: <StaffResetPassword /> },
       {
         path: '',
-        element: <StaffMainLayout />,
+        element: (
+          <StaffProtectedRoute>
+            <StaffMainLayout />
+          </StaffProtectedRoute>
+        ),
         children: [
           { path: 'dashboard', element: <StaffDashboard /> },
           { path: 'students', element: <StaffStudents /> },
           { path: 'classes', element: <StaffClasses /> },
           { path: 'subjects', element: <StaffSubjects /> },
           { path: 'results', element: <StaffResults /> },
+          { path: 'input-marks', element: <InputMarks /> },
+          { path: 'view-results', element: <ViewResults /> },
+          { 
+            path: 'statistics', 
+            element: (
+              <AuthenticatedRoute userType="staff">
+                <StatisticsDashboard />
+              </AuthenticatedRoute>
+            ) 
+          },
+          { 
+            path: 'statistics/school', 
+            element: (
+              <AuthenticatedRoute userType="staff">
+                <SchoolDashboard />
+              </AuthenticatedRoute>
+            ) 
+          },
+          { 
+            path: 'statistics/students', 
+            element: (
+              <AuthenticatedRoute userType="staff">
+                <StudentStatistics />
+              </AuthenticatedRoute>
+            ) 
+          },
+          { 
+            path: 'statistics/classes', 
+            element: (
+              <AuthenticatedRoute userType="staff">
+                <ClassStatistics />
+              </AuthenticatedRoute>
+            ) 
+          },
+          { path: 'statistics/student/:studentId', element: <StudentAnalyticsWrapper /> },
+          { path: 'statistics/class/:classId', element: <ClassAnalyticsWrapper /> },
+          { path: 'statistics/subject/:subjectId', element: <SubjectAnalyticsWrapper /> },
+          { 
+            path: 'reports', 
+            element: (
+              <AuthenticatedRoute userType="staff">
+                <ReportsDashboard />
+              </AuthenticatedRoute>
+            ) 
+          },
           { path: 'profile', element: <StaffProfile /> },
         ],
       },
@@ -89,7 +155,7 @@ const router = createBrowserRouter([
         path: 'dashboard', 
         element: (
           <ParentProtectedRoute>
-            <ParentDashboard />
+            <ParentDashboardNew />
           </ParentProtectedRoute>
         ) 
       },
@@ -118,7 +184,11 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <StaffAuthProvider>
+        <ParentAuthProvider>
+          <RouterProvider router={router} />
+        </ParentAuthProvider>
+      </StaffAuthProvider>
     </AuthProvider>
   </StrictMode>,
 )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 interface StaffSidebarProps {
@@ -16,6 +16,8 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ staffInfo, onLogout }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isResultsOpen, setIsResultsOpen] = useState(false);
+  const [isStatisticsOpen, setIsStatisticsOpen] = useState(false);
 
   const menuItems = [
     {
@@ -58,9 +60,87 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ staffInfo, onLogout }) => {
     {
       name: 'Results',
       path: '/staff/results',
+      hasDropdown: true,
+      subItems: [
+        {
+          name: 'Input Marks',
+          path: '/staff/input-marks',
+          icon: (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          )
+        },
+        {
+          name: 'View Results',
+          path: '/staff/view-results',
+          icon: (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          )
+        }
+      ],
       icon: (
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      )
+    },
+    {
+      name: 'Statistics',
+      path: '/staff/statistics',
+      hasDropdown: true,
+      subItems: [
+        {
+          name: 'Overview Dashboard',
+          path: '/staff/statistics',
+          icon: (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+            </svg>
+          )
+        },
+        {
+          name: 'School Dashboard',
+          path: '/staff/statistics/school',
+          icon: (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          )
+        },
+        {
+          name: 'Student Statistics',
+          path: '/staff/statistics/students',
+          icon: (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+            </svg>
+          )
+        },
+        {
+          name: 'Class Statistics',
+          path: '/staff/statistics/classes',
+          icon: (
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          )
+        }
+      ],
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+      )
+    },
+    {
+      name: 'Reports',
+      path: '/staff/reports',
+      icon: (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
         </svg>
       )
     },
@@ -79,10 +159,42 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ staffInfo, onLogout }) => {
     return location.pathname === path;
   };
 
+  const isResultsActive = () => {
+    return location.pathname === '/staff/results' || 
+           location.pathname === '/staff/input-marks' || 
+           location.pathname === '/staff/view-results';
+  };
+
+  const isStatisticsActive = () => {
+    return location.pathname === '/staff/statistics' || 
+           location.pathname === '/staff/statistics/school' || 
+           location.pathname === '/staff/statistics/students' || 
+           location.pathname === '/staff/statistics/classes' ||
+           location.pathname.startsWith('/staff/statistics/');
+  };
+
   const handleNavigation = (path: string) => {
     navigate(path);
     setIsMobileMenuOpen(false); // Close mobile menu after navigation
   };
+
+  const handleResultsToggle = () => {
+    setIsResultsOpen(!isResultsOpen);
+  };
+
+  const handleStatisticsToggle = () => {
+    setIsStatisticsOpen(!isStatisticsOpen);
+  };
+
+  // Auto-open Results dropdown when on Results-related pages
+  useEffect(() => {
+    if (isResultsActive()) {
+      setIsResultsOpen(true);
+    }
+    if (isStatisticsActive()) {
+      setIsStatisticsOpen(true);
+    }
+  }, [location.pathname]);
 
   return (
     <>
@@ -129,7 +241,13 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ staffInfo, onLogout }) => {
                   staffInfo={staffInfo} 
                   menuItems={menuItems} 
                   isActive={isActive} 
+                  isResultsActive={isResultsActive}
+                  isResultsOpen={isResultsOpen}
+                  isStatisticsActive={isStatisticsActive}
+                  isStatisticsOpen={isStatisticsOpen}
                   handleNavigation={handleNavigation} 
+                  handleResultsToggle={handleResultsToggle}
+                  handleStatisticsToggle={handleStatisticsToggle}
                   onLogout={onLogout} 
                 />
               </div>
@@ -146,7 +264,13 @@ const StaffSidebar: React.FC<StaffSidebarProps> = ({ staffInfo, onLogout }) => {
               staffInfo={staffInfo} 
               menuItems={menuItems} 
               isActive={isActive} 
+              isResultsActive={isResultsActive}
+              isResultsOpen={isResultsOpen}
+              isStatisticsActive={isStatisticsActive}
+              isStatisticsOpen={isStatisticsOpen}
               handleNavigation={handleNavigation} 
+              handleResultsToggle={handleResultsToggle}
+              handleStatisticsToggle={handleStatisticsToggle}
               onLogout={onLogout} 
             />
           </div>
@@ -161,9 +285,15 @@ const SidebarContent: React.FC<{
   staffInfo: any;
   menuItems: any[];
   isActive: (path: string) => boolean;
+  isResultsActive: () => boolean;
+  isResultsOpen: boolean;
+  isStatisticsActive: () => boolean;
+  isStatisticsOpen: boolean;
   handleNavigation: (path: string) => void;
+  handleResultsToggle: () => void;
+  handleStatisticsToggle: () => void;
   onLogout: () => void;
-}> = ({ staffInfo, menuItems, isActive, handleNavigation, onLogout }) => {
+}> = ({ staffInfo, menuItems, isActive, isResultsActive, isResultsOpen, isStatisticsActive, isStatisticsOpen, handleNavigation, handleResultsToggle, handleStatisticsToggle, onLogout }) => {
   return (
     <>
       {/* Logo/School Info */}
@@ -194,18 +324,65 @@ const SidebarContent: React.FC<{
       {/* Navigation */}
       <nav className="mt-5 flex-1 px-2 space-y-1">
         {menuItems.map((item) => (
-          <button
-            key={item.name}
-            onClick={() => handleNavigation(item.path)}
-            className={`${
-              isActive(item.path)
-                ? 'bg-indigo-800 text-white'
-                : 'text-indigo-100 hover:bg-indigo-600 hover:text-white'
-            } group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors`}
-          >
-            <span className="mr-3 flex-shrink-0">{item.icon}</span>
-            <span className="truncate">{item.name}</span>
-          </button>
+          <div key={item.name}>
+            {item.hasDropdown ? (
+              <>
+                <button
+                  onClick={item.name === 'Results' ? handleResultsToggle : handleStatisticsToggle}
+                  className={`${
+                    (item.name === 'Results' ? isResultsActive() : isStatisticsActive())
+                      ? 'bg-indigo-800 text-white'
+                      : 'text-indigo-100 hover:bg-indigo-600 hover:text-white'
+                  } group flex items-center justify-between px-2 py-2 text-sm font-medium rounded-md w-full transition-colors`}
+                >
+                  <div className="flex items-center">
+                    <span className="mr-3 flex-shrink-0">{item.icon}</span>
+                    <span className="truncate">{item.name}</span>
+                  </div>
+                  <svg 
+                    className={`w-4 h-4 transition-transform ${
+                      (item.name === 'Results' ? isResultsOpen : isStatisticsOpen) ? 'rotate-180' : 'rotate-0'
+                    }`}
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {(item.name === 'Results' ? isResultsOpen : isStatisticsOpen) && (
+                  <div className="ml-4 mt-1 space-y-1">
+                    {item.subItems?.map((subItem: any) => (
+                      <button
+                        key={subItem.name}
+                        onClick={() => handleNavigation(subItem.path)}
+                        className={`${
+                          isActive(subItem.path)
+                            ? 'bg-indigo-800 text-white'
+                            : 'text-indigo-100 hover:bg-indigo-600 hover:text-white'
+                        } group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors`}
+                      >
+                        <span className="mr-3 flex-shrink-0">{subItem.icon}</span>
+                        <span className="truncate">{subItem.name}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <button
+                onClick={() => handleNavigation(item.path)}
+                className={`${
+                  isActive(item.path)
+                    ? 'bg-indigo-800 text-white'
+                    : 'text-indigo-100 hover:bg-indigo-600 hover:text-white'
+                } group flex items-center px-2 py-2 text-sm font-medium rounded-md w-full transition-colors`}
+              >
+                <span className="mr-3 flex-shrink-0">{item.icon}</span>
+                <span className="truncate">{item.name}</span>
+              </button>
+            )}
+          </div>
         ))}
       </nav>
 

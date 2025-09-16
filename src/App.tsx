@@ -1,5 +1,5 @@
-import SchoolRegistration from './components/SchoolRegistration'
+import SchoolRegistration from './components/SchoolRegistration';
 
 export default function App() {
-  return <SchoolRegistration />
+  return <SchoolRegistration />;
 }

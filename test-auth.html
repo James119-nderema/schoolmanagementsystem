@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Test</title>
+</head>
+<body>
+    <h1>Authentication Security Test</h1>
+    <div id="status"></div>
+    <button id="setFakeToken">Set Fake Token</button>
+    <button id="testAuth">Test Authentication</button>
+    <button id="clearAuth">Clear Auth</button>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        
+        // Set a fake token to simulate what would happen after database clear
+        document.getElementById('setFakeToken').addEventListener('click', () => {
+            localStorage.setItem('staff_access_token', 'fake_token_from_before_database_clear');
+            localStorage.setItem('staff_info', JSON.stringify({
+                id: '999',
+                email: 'test@example.com',
+                full_name: 'Test User',
+                school_id: 1,
+                school_name: 'Test School',
+                phone_number: '1234567890'
+            }));
+            statusDiv.innerHTML = '<p style="color: green;">Fake token set in localStorage</p>';
+        });
+        
+        // Test authentication by calling the verify endpoint
+        document.getElementById('testAuth').addEventListener('click', async () => {
+            const token = localStorage.getItem('staff_access_token');
+            if (!token) {
+                statusDiv.innerHTML = '<p style="color: red;">No token found</p>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:8000/api/staff/auth/verify_token/', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    statusDiv.innerHTML = `<p style="color: green;">Token valid: ${JSON.stringify(data)}</p>`;
+                } else {
+                    statusDiv.innerHTML = `<p style="color: red;">Token invalid. Status: ${response.status}</p>`;
+                    // This is where our authentication system should redirect to login
+                    console.log('Authentication failed, should redirect to login');
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+            }
+        });
+        
+        // Clear authentication
+        document.getElementById('clearAuth').addEventListener('click', () => {
+            localStorage.removeItem('staff_access_token');
+            localStorage.removeItem('staff_info');
+            statusDiv.innerHTML = '<p style="color: blue;">Authentication cleared</p>';
+        });
+        
+        // Check current auth status on load
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('staff_access_token');
+            const info = localStorage.getItem('staff_info');
+            if (token && info) {
+                statusDiv.innerHTML = '<p style="color: orange;">Found existing auth data</p>';
+            } else {
+                statusDiv.innerHTML = '<p style="color: gray;">No auth data found</p>';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useStaffAuth } from '../contexts/StaffAuthContext';
 
 interface LoginFormData {
   email: string;
@@ -15,6 +15,7 @@ const StaffLogin: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const navigate = useNavigate();
+  const { login } = useStaffAuth();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -30,41 +31,28 @@ const StaffLogin: React.FC = () => {
     setMessage(null);
 
     try {
-      const response = await axios.post('http://localhost:8000/api/staff/auth/login/', formData);
+      const success = await login(formData.email, formData.password);
       
-      const { access_token, staff } = response.data;
-      
-      // Store tokens and staff info
-      localStorage.setItem('staff_access_token', access_token);
-      localStorage.setItem('staff_info', JSON.stringify(staff));
-      
-      setMessage({
-        type: 'success',
-        text: 'Login successful! Redirecting...'
-      });
-      
-      // Redirect to staff dashboard after 1 second
-      setTimeout(() => {
-        navigate('/staff/dashboard');
-      }, 1000);
+      if (success) {
+        setMessage({
+          type: 'success',
+          text: 'Login successful! Redirecting...'
+        });
+        
+        // Redirect to staff dashboard after 1 second
+        setTimeout(() => {
+          navigate('/staff/dashboard');
+        }, 1000);
+      } else {
+        setMessage({
+          type: 'error',
+          text: 'Login failed. Please check your credentials.'
+        });
+      }
 
     } catch (error: any) {
       let errorMessage = 'Login failed. Please check your credentials.';
       
-      if (error.response?.data) {
-        const errors = error.response.data;
-        if (typeof errors === 'object') {
-          const firstError = Object.values(errors)[0];
-          if (Array.isArray(firstError)) {
-            errorMessage = firstError[0];
-          } else if (typeof firstError === 'string') {
-            errorMessage = firstError;
-          }
-        } else if (typeof errors === 'string') {
-          errorMessage = errors;
-        }
-      }
-
       setMessage({
         type: 'error',
         text: errorMessage

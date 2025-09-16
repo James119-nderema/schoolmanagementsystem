@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface SchoolFormData {
@@ -27,6 +27,10 @@ export default function SchoolRegistration() {
   const [messageType, setMessageType] = useState<'success' | 'error'>('success')
   const [schools, setSchools] = useState<any[]>([])
   const [loadingSchools, setLoadingSchools] = useState(false)
+  
+  // Suppress TypeScript warnings - these variables are used for future functionality
+  void schools;
+  void loadingSchools;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -108,22 +112,22 @@ export default function SchoolRegistration() {
     setLoadingSchools(false)
   }
 
-  const viewSchoolDetails = (school: any) => {
-    const details = `
-School: ${school.school_name}
-Email: ${school.email || 'N/A'}
-Phone: ${school.phone_number || 'N/A'}
-Principal: ${school.principal_name || 'N/A'}
-Domain: ${school.school_domain || 'N/A'}
-Created: ${new Date(school.created_at).toLocaleDateString()}
-    `
-    alert(details)
-  }
+  // const viewSchoolDetails = (school: any) => {
+  //   const details = `
+  // School: ${school.school_name}
+  // Email: ${school.email || 'N/A'}
+  // Phone: ${school.phone_number || 'N/A'}
+  // Principal: ${school.principal_name || 'N/A'}
+  // Domain: ${school.school_domain || 'N/A'}
+  // Created: ${new Date(school.created_at).toLocaleDateString()}
+  //   `
+  //   alert(details)
+  // }
 
   // Load schools on component mount
-  useState(() => {
+  useEffect(() => {
     loadSchools()
-  })
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -153,13 +157,13 @@ Created: ${new Date(school.created_at).toLocaleDateString()}
             </button>
           </div>
           <h1 className="text-5xl font-bold text-gray-800 mb-4">School Management System</h1>
-          <p className="text-xl text-gray-600">Create and manage multiple schools with ease</p>
+          <p className="text-xl text-gray-600">Create and manage your school with ease</p>
         </div>
 
         {/* Add School Form */}
         <div className="max-w-4xl mx-auto mb-12">
           <div className="bg-white rounded-2xl shadow-xl p-8">
-            <h2 className="text-3xl font-semibold text-gray-800 mb-8 text-center">Register New School</h2>
+            <h2 className="text-3xl font-semibold text-gray-800 mb-8 text-center">Register Your1111 School</h2>
             
             <form onSubmit={createSchool} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -294,93 +298,6 @@ Created: ${new Date(school.created_at).toLocaleDateString()}
             {message && (
               <div className={`mt-6 p-4 rounded-lg ${messageType === 'success' ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-red-100 text-red-700 border border-red-200'}`}>
                 <p className="font-medium">{message}</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Schools List */}
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl p-8">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-3xl font-semibold text-gray-800">Registered Schools</h2>
-              <button 
-                onClick={loadSchools}
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition duration-200 flex items-center space-x-2"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                </svg>
-                <span>Refresh</span>
-              </button>
-            </div>
-            
-            {loadingSchools && (
-              <div className="text-center py-12">
-                <svg className="animate-spin mx-auto h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <p className="text-gray-500 mt-4">Loading schools...</p>
-              </div>
-            )}
-            
-            {!loadingSchools && schools.length === 0 && (
-              <div className="text-center py-12">
-                <svg className="mx-auto h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-                <p className="text-gray-500 text-lg mt-4">No schools found. Create your first school above!</p>
-              </div>
-            )}
-            
-            {!loadingSchools && schools.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {schools.map((school) => (
-                  <div key={school.id} className="border border-gray-200 rounded-xl p-6 hover:shadow-lg transition duration-200 bg-gradient-to-br from-white to-gray-50">
-                    <div className="flex justify-between items-start mb-4">
-                      <h3 className="text-xl font-semibold text-gray-800">{school.school_name}</h3>
-                      <span 
-                        className={`px-3 py-1 text-xs rounded-full font-medium ${
-                          school.is_active 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}
-                      >
-                        {school.is_active ? 'Active' : 'Inactive'}
-                      </span>
-                    </div>
-                    
-                    <div className="space-y-2 text-sm text-gray-600 mb-4">
-                      {school.email && (
-                        <p><strong>Email:</strong> {school.email}</p>
-                      )}
-                      {school.phone_number && (
-                        <p><strong>Phone:</strong> {school.phone_number}</p>
-                      )}
-                      {school.principal_name && (
-                        <p><strong>Principal:</strong> {school.principal_name}</p>
-                      )}
-                      {school.school_domain && (
-                        <p>
-                          <strong>Domain:</strong> 
-                          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs mr-1 ml-1">
-                            {school.school_domain}
-                          </span>
-                        </p>
-                      )}
-                    </div>
-                    
-                    <div className="flex justify-center">
-                      <button 
-                        onClick={() => viewSchoolDetails(school)}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition duration-200"
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                ))}
               </div>
             )}
           </div>

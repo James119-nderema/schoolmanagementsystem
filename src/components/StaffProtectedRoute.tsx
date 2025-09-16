@@ -1,14 +1,14 @@
 import React from 'react';
 import type { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useParentAuth } from '../contexts/ParentAuthContext';
+import { useStaffAuth } from '../contexts/StaffAuthContext';
 
-interface ParentProtectedRouteProps {
+interface StaffProtectedRouteProps {
   children: ReactNode;
 }
 
-const ParentProtectedRoute: React.FC<ParentProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, loading } = useParentAuth();
+const StaffProtectedRoute: React.FC<StaffProtectedRouteProps> = ({ children }) => {
+  const { isAuthenticated, loading } = useStaffAuth();
 
   if (loading) {
     return (
@@ -19,10 +19,10 @@ const ParentProtectedRoute: React.FC<ParentProtectedRouteProps> = ({ children })
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/parent/login" replace />;
+    return <Navigate to="/staff/login" replace />;
   }
 
   return <>{children}</>;
 };
 
-export default ParentProtectedRoute;
+export default StaffProtectedRoute;

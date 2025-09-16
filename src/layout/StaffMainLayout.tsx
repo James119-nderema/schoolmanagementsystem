@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import StaffSidebar from '../components/staff/StaffSidebar';
+import { useAuthValidation } from '../hooks/useAuthValidation';
+import { clearAuthData } from '../utils/authUtils';
 
 interface StaffInfo {
   id: string;
@@ -14,6 +16,9 @@ interface StaffInfo {
 const StaffMainLayout: React.FC = () => {
   const [staffInfo, setStaffInfo] = useState<StaffInfo | null>(null);
   const navigate = useNavigate();
+  
+  // Use authentication validation hook
+  useAuthValidation('staff');
 
   useEffect(() => {
     // Check if staff is logged in
@@ -34,8 +39,7 @@ const StaffMainLayout: React.FC = () => {
   }, [navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem('staff_access_token');
-    localStorage.removeItem('staff_info');
+    clearAuthData('staff');
     navigate('/staff/login');
   };
 
