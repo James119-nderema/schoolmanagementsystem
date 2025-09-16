@@ -47,7 +47,8 @@ import ParentForgotPassword from './components/parents/ParentForgotPassword'
 // import ParentDashboardOld from './components/parents/ParentDashboard'
 import ParentDashboardNew from './pages/ParentDashboard'
 import Dashboard from './pages/Dashboard'
-import Home from './pages/Home'
+import Home from './components/Home'
+import DashboardHome from './pages/Home'
 import Students from './pages/Students'
 import Subjects from './pages/Subjects'
 import Results from './pages/Results'
@@ -59,7 +60,8 @@ const router = createBrowserRouter([
     path: '/',
     element: <LandingLayout />,
     children: [
-      { index: true, element: <SchoolRegistration /> },
+      { index: true, element: <Home /> },
+      { path: 'create-school', element: <SchoolRegistration /> },
       { path: 'login', element: <SchoolLogin /> },
       { path: 'forgot-password', element: <ForgotPassword /> },
       { path: 'reset-password', element: <ResetPassword /> },
@@ -169,7 +171,7 @@ const router = createBrowserRouter([
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <Home /> },
+      { index: true, element: <DashboardHome /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'students', element: <Students /> },
       { path: 'subjects', element: <Subjects /> },
