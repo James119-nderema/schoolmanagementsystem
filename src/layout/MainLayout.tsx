@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
-import Sidebar from '../components/Sidebar'
+import { useAuth } from '../components/authentication/contexts/AuthContext'
+import Sidebar from '../components/sidebars/Sidebar'
 
 export default function MainLayout() {
 	const { user, logout } = useAuth();

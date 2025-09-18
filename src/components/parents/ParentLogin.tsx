@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useParentAuth } from '../authentication/contexts/ParentAuthContext';
 
 interface LoginFormData {
   email: string;
@@ -14,6 +15,7 @@ export default function ParentLogin() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
+  const { login } = useParentAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,26 +23,13 @@ export default function ParentLogin() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/parents/login/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Store the access token
-        localStorage.setItem('parent_access_token', data.access_token);
-        localStorage.setItem('parent_refresh_token', data.refresh_token);
-        localStorage.setItem('parent_info', JSON.stringify(data.parent));
-        
+      const success = await login(formData.email, formData.password);
+      
+      if (success) {
         // Redirect to parent dashboard
-        navigate('/parent-dashboard');
+        navigate('/parent/dashboard');
       } else {
-        setError(data.error || 'Login failed. Please try again.');
+        setError('Login failed. Please check your credentials.');
       }
     } catch (err) {
       setError('Network error occurred. Please try again.');

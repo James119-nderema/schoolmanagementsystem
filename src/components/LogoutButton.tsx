@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useStaffAuth } from '../contexts/StaffAuthContext';
-import { useParentAuth } from '../contexts/ParentAuthContext';
+import { useAuth } from './authentication/contexts/AuthContext';
+import { useStaffAuth } from './authentication/contexts/StaffAuthContext';
+import { useParentAuth } from './authentication/contexts/ParentAuthContext';
 import { useAuthStatus } from '../hooks/useAuthStatus';
 
 interface LogoutButtonProps {

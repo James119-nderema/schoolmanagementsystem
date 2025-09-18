@@ -1,6 +1,6 @@
-import { useAuth } from '../contexts/AuthContext';
-import { useStaffAuth } from '../contexts/StaffAuthContext';
-import { useParentAuth } from '../contexts/ParentAuthContext';
+import { useAuth } from '../components/authentication/contexts/AuthContext';
+import { useStaffAuth } from '../components/authentication/contexts/StaffAuthContext';
+import { useParentAuth } from '../components/authentication/contexts/ParentAuthContext';
 
 export interface AuthStatus {
   isSchoolAuthenticated: boolean;

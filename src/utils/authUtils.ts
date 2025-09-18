@@ -14,7 +14,8 @@ export const validateToken = async (token: string, userType: 'staff' | 'parent')
       },
     });
     
-    return response.status === 200;
+    // Check both status code and response data
+    return response.status === 200 && response.data?.valid === true;
   } catch (error) {
     return false;
   }

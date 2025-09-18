@@ -1,4 +1,4 @@
-import SchoolRegistration from './components/SchoolRegistration';
+import SchoolRegistration from './components/school/SchoolRegistration';
 
 export default function App() {
   return <SchoolRegistration />;

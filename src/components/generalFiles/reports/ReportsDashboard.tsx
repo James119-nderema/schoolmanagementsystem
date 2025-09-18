@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { authFetch } from '../../utils/apiInterceptors';
+import { authFetch } from '../../../utils/apiInterceptors';
 
 interface Student {
   student_name: string;
