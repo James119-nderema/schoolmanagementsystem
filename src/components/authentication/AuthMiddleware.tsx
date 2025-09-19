@@ -1,9 +1,9 @@
 import React from 'react';
 import type { ReactNode } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { useStaffAuth } from '../contexts/StaffAuthContext';
-import { useParentAuth } from '../contexts/ParentAuthContext';
+import { useAuth } from './contexts/AuthContext';
+import { useStaffAuth } from './contexts/StaffAuthContext';
+import { useParentAuth } from './contexts/ParentAuthContext';
 
 interface AuthMiddlewareProps {
   children: ReactNode;

@@ -41,6 +41,7 @@ import SchoolDashboard from './pages/SchoolDashboard'
 import StudentStatistics from './components/generalFiles/analytics/StudentStatistics'
 import ClassStatistics from './components/generalFiles/analytics/ClassStatistics'
 import ReportsDashboard from './components/generalFiles/reports/ReportsDashboard'
+import ReportsPage from './components/templates/ReportsPage'
 import ParentRegistration from './components/parents/ParentRegistration'
 import ParentLogin from './components/parents/ParentLogin'
 import ParentForgotPassword from './components/parents/ParentForgotPassword'
@@ -142,6 +143,14 @@ const router = createBrowserRouter([
               </AuthenticatedRoute>
             ) 
           },
+          { 
+            path: 'report-card/pdf', 
+            element: (
+              <AuthenticatedRoute userType="staff">
+                <ReportsPage />
+              </AuthenticatedRoute>
+            ) 
+          },
           { path: 'profile', element: <StaffProfile /> },
         ],
       },
@@ -157,6 +166,22 @@ const router = createBrowserRouter([
         element: (
           <ParentProtectedRoute>
             <ParentDashboardNew />
+          </ParentProtectedRoute>
+        ) 
+      },
+      { 
+        path: 'report-card', 
+        element: (
+          <ParentProtectedRoute>
+            <ReportsPage />
+          </ParentProtectedRoute>
+        ) 
+      },
+      { 
+        path: 'report-card', 
+        element: (
+          <ParentProtectedRoute>
+            <ReportsPage />
           </ParentProtectedRoute>
         ) 
       },
