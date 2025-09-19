@@ -53,6 +53,8 @@ import Subjects from './pages/Subjects'
 import Results from './pages/Results'
 import Classes from './pages/Classes'
 import Staff from './pages/Staff'
+// payment
+import Payment from './pages/Payment'
 
 const router = createBrowserRouter([
   {
@@ -160,6 +162,14 @@ const router = createBrowserRouter([
           </ParentProtectedRoute>
         ) 
       },
+    { 
+      path: 'payment', 
+      element: (
+        <ParentProtectedRoute>
+          <Payment />
+        </ParentProtectedRoute>
+      ) 
+    },      
     ],
   },
   {
