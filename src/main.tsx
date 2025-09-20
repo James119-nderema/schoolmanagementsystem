@@ -55,6 +55,8 @@ import Classes from './pages/Classes'
 import Staff from './pages/Staff'
 // payment
 import Payment from './pages/Payment'
+import SchoolFinance from './components/finance/School_Finance'
+import SchoolPaymentMethod from './components/finance/School_Payment_Methods'
 
 const router = createBrowserRouter([
   {
@@ -187,6 +189,8 @@ const router = createBrowserRouter([
       { path: 'results', element: <Results /> },
       { path: 'classes', element: <Classes /> },
       { path: 'staff', element: <Staff /> },
+      { path: 'finance', element: <SchoolFinance /> },
+      { path: ':schoolId/fee-payment-methods', element: <SchoolPaymentMethod /> },
       { path: '*', element: <div className="p-6">Not Found</div> },
     ],
   },
